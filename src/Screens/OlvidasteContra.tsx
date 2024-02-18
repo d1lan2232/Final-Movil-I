@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { PRIMARY_COLOR } from '../commons/color';
 
 export const OlvidasteContra = () => {
   return (
@@ -25,13 +26,12 @@ export const OlvidasteContra = () => {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#e3f2fd',
+        backgroundColor:PRIMARY_COLOR,
         alignContent: 'center',
-        //alignItems: 'center',
         padding: 5,
     },
     textoOlvidaste:{
-        color: 'black',
+        color: '#fff',
         fontSize: 25,
         padding: 10,
         left: 5,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         alignSelf: 'baseline',
     },
     container2:{
-        backgroundColor: 'white',
+        backgroundColor: '#5a7ca7',
         width: '95%',
         height: '25%',
         borderWidth: 2,

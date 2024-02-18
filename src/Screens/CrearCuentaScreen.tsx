@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { PRIMARY_COLOR } from '../commons/color';
 
 export const CrearCuentaScreen = () => {
    
@@ -47,18 +48,19 @@ export const CrearCuentaScreen = () => {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#e3f2fd',
+        backgroundColor:PRIMARY_COLOR,
         alignContent: 'center',
         //alignItems: 'center',
         padding: 10,
     },
     textoCrear:{
-        color: 'black',
+        color: '#FFF',
         fontSize: 30,
         padding: 10,
         left: 5,
         fontWeight: 'bold',
         top: 10,
+        
     },
     textoSolicitar:{
         color: 'grey',
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic'
     },
     container2:{
-        backgroundColor: 'white',
+        backgroundColor: '#5a7ca7',
         width: '95%',
         height: '75%',
         borderWidth: 2,
