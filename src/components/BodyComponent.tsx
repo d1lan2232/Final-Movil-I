@@ -17,9 +17,9 @@ export const BodyComponent = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: BODY_COLOR,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    backgroundColor: '#6498e7',
+    // borderTopLeftRadius: 30,
+    // borderTopRightRadius: 30,
     paddingHorizontal: 40,
     paddingVertical: 40
   }

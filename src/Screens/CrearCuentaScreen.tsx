@@ -1,48 +1,120 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { PRIMARY_COLOR } from '../commons/color';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { ERROR_COLOR, PRIMARY_COLOR } from '../commons/color';
+import { ButtonComponent } from '../components/ButtonComponent';
+import { TitleComponent } from '../components/TitleComponent';
+import { User } from '../Navigator/StackNavigator';
+import { useNavigation } from '@react-navigation/native';
+import { getIdNewUser, hasErrorFormRegister, showSnackBar, verifyExistUser } from '../commons/authValidations';
+import { InputComponent } from '../components/InputComponent';
 
-export const CrearCuentaScreen = () => {
-   
-  return (
-    <View style={styles.container}>
-        <Text style={styles.textoCrear}>Crear una cuenta</Text>
-        <Text style={styles.textoSolicitar}>Solicitaremos datos importantes para la creacion</Text>
-        <View style={styles.container2}>
-            <Text style={styles.textoNombre}>Nombre:</Text>
-            <TextInput
-            style={styles.formulario}
-            placeholder="Nombre"
-            keyboardType="email-address"
-            />
-            <Text style={styles.textoEmail}>Email</Text>
-            <TextInput
-            style={styles.formularioEmail}
-            placeholder="Email"
-            keyboardType="email-address"
-            />
-            <Text style={styles.textoContra}>Contaseña:</Text>
-            <TextInput
-            style={styles.cuadroPass}
-            placeholder="Contraseña"
-            secureTextEntry={true}
-            />
-            <Text style={styles.textoConfContra}>Confirmar contraseña:</Text>
-            <TextInput
-            style={styles.cuadroConfPass}
-            placeholder="Contraseña"
-            secureTextEntry={true}
-            />
-            <Text style={styles.mayorEdad}>Al dar click en "crear" usted indica ser mayor de edad</Text>
-            <TouchableOpacity style={styles.boton}>
-            <Text style={styles.textoBoton}>Volver</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.boton2}>
-            <Text style={styles.textoBoton}>Crear</Text>
-            </TouchableOpacity>
+
+export interface RegisterForm{
+    username: string;
+    email: string;
+    password: string;
+    hasError: boolean;
+}
+
+interface RegisterProps{
+    usersLogin:User[];
+    setUsersLogin:(user:User)=>void;
+}
+
+export const CrearCuentaScreen = ({usersLogin, setUsersLogin}:RegisterProps) => {
+    //Hook de navegación
+    const navigation=useNavigation();
+
+    //Hook - desencriptar el password
+    const [hiddenPassword, setHiddenPassword] = useState(true);
+
+    //Hook - control de los datos en el form
+    const[form, setForm]=useState<RegisterForm>({
+        username:'',
+        email:'',
+        password:'',
+        hasError: false,
+    });
+    
+    //Función para guardar los usuarios
+    const handlerSaveUser=()=>{
+        //Validar formulario
+        if(hasErrorFormRegister(form)){ 
+            setForm(prevState=>({
+                ...prevState,
+                hasError:true
+            }))
+            return;  
+        }
+        setForm(prevState=>({
+            ...prevState,
+            hasError:false
+        }))
+
+        const existUser=verifyExistUser(usersLogin, form);
+        if(existUser){
+            showSnackBar("El usuario ya se encuentra registrado", ERROR_COLOR)
+            return;
+        }
+
+        //Usuario nuevo
+        const newUser:User={
+            id: getIdNewUser(usersLogin),
+            ...form
+        }
+
+        //agregar el nuevo usario en el arreglo de usersLogin
+        setUsersLogin(newUser)
+        showSnackBar("Usuario registrado con éxito!", PRIMARY_COLOR)
+        
+        // Mostrar alerta de registro exitoso
+        Alert.alert("Registro exitoso", "¡Usuario registrado con éxito!");
+
+        //volver inicio sesión
+        navigation.goBack();
+    }
+
+    //Función que cambie el valor del useState (form)
+    const handlerChangeText=(name: string, value:string)=>{
+        setForm(prevState=>({
+            ...prevState,
+            [name]:value,
+        }))
+    }
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.textoCrear}>Crear una cuenta</Text>
+            <Text style={styles.textoSolicitar}>Solicitaremos datos importantes para la creacion</Text>
+            <View style={styles.container2}>
+
+                <Text style={styles.textoEmail}>Email</Text>
+                <InputComponent 
+                    placeholder='Correo electrónico'
+                    onChangeText={handlerChangeText}
+                    name={'email'}
+                    hasError={form.hasError}/>
+                <Text style={styles.textoEmail}>Usuario</Text>
+                <InputComponent 
+                    placeholder='Usuario'
+                    onChangeText={handlerChangeText}
+                    name={'username'}
+                    hasError={form.hasError}/>
+                <Text style={styles.textoEmail}>Contraseña</Text>
+                <InputComponent
+                    placeholder='Password'
+                    onChangeText={handlerChangeText}
+                    name={'password'}
+                    isPassword={hiddenPassword}
+                    hasIcon={true}
+                    accionIcon={()=>setHiddenPassword(!hiddenPassword)}
+                    hasError={form.hasError}
+                />
+                <ButtonComponent title='Registrarse' onPress={handlerSaveUser} />
+                
+            </View>
         </View>
-    </View>
-  )
+    )
 }
 
 const styles = StyleSheet.create({
@@ -50,7 +122,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:PRIMARY_COLOR,
         alignContent: 'center',
-        //alignItems: 'center',
         padding: 10,
     },
     textoCrear:{
@@ -60,7 +131,6 @@ const styles = StyleSheet.create({
         left: 5,
         fontWeight: 'bold',
         top: 10,
-        
     },
     textoSolicitar:{
         color: 'grey',
@@ -71,7 +141,7 @@ const styles = StyleSheet.create({
     container2:{
         backgroundColor: '#5a7ca7',
         width: '95%',
-        height: '75%',
+        height: '60%',
         borderWidth: 2,
         borderColor: 'black', 
         padding: 15,
@@ -81,98 +151,14 @@ const styles = StyleSheet.create({
         bottom: 15,
         borderRadius: 25,
         elevation: 16, 
-    },
-    formulario:{
-        width: '80%',
-        borderWidth: 1,
-        padding: 15,
-        alignSelf: 'center',
-        top: 10,
-        borderRadius: 30,
-        backgroundColor: 'white',
-        elevation: 16, 
-    },
-    textoNombre:{
-        color: 'black',
-        fontSize: 15,
+
     },
     textoEmail:{
         color: 'black',
         top: 30,
-        fontSize: 15,
+        fontSize: 20,
+        height:50
     },
-    formularioEmail:{
-        width: '80%',
-        borderWidth: 1,
-        padding: 15,
-        alignSelf: 'center',
-        top: 35,
-        borderRadius: 30,
-        backgroundColor: 'white',
-        elevation: 16, 
-    },
-    textoContra:{
-        color: 'black',
-        top: 55,
-        fontSize: 15,
-    },
-    cuadroPass:{
-        width: '80%',
-        borderWidth: 1,
-        padding: 15,
-        alignSelf: 'center',
-        top: 70,
-        borderRadius: 30,
-        backgroundColor: 'white',
-        elevation: 16, 
-    },
-    textoConfContra:{
-        color: 'black',
-        top: 90,
-        fontSize: 15,
-    },
-    cuadroConfPass:{
-        width: '80%',
-        borderWidth: 1,
-        padding: 15,
-        alignSelf: 'center',
-        top: 110,
-        borderRadius: 30,
-        backgroundColor: 'white',
-        elevation: 16, 
-    },
-    mayorEdad:{
-        top: 135,
-        fontStyle: 'italic',
-        alignSelf: 'center'
-    },
-    boton:{
-        width: 100,
-        borderRadius: 25,
-        fontWeight: 'bold',
-        alignItems: 'center',
-        backgroundColor: '#e57373',
-        padding: 10,
-        top: 140,
-        left: 10,
-        borderWidth: 1,
-        borderColor: 'black', 
-    },
-    boton2:{
-        width: 100,
-        borderRadius: 25,
-        fontWeight: 'bold',
-        alignItems: 'center',
-        backgroundColor: '#81c784',
-        padding: 10,
-        top: 100,
-        left: 230,
-        borderWidth: 1,
-        borderColor: 'black', 
-    },
-    textoBoton:{
-        color: 'white',
-        fontWeight: 'bold',
-        alignSelf: 'center'
-    }
 })
+
+export default CrearCuentaScreen;

@@ -1,9 +1,6 @@
 
 import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-
-//import Icon  from 'react-native-vector-icons/MaterialIcons';
-import { PRIMARY_COLOR } from '../../../commons/color';
 import { ModalProduct } from './ModalProduct';
 import { Product } from '../HomeScreen';
 
@@ -36,23 +33,25 @@ export const CardProducts = ({product,handlerChangeStockProduct}:Props) => {
 
 const styles=StyleSheet.create({
     root:{
-        flexDirection:'row',
-        textAlign:'center',
+        
+       // textAlign:'center',
         padding:10,
         borderStyle:'solid',
-        borderColor:'#ccc',
-        borderWidth:8,
+        borderColor:'black',
+        borderWidth:4,
         shadowColor: "#000",
         shadowOffset: {
 	        width: 0,
 	        height: 3,
         },
         marginBottom:35,
+        backgroundColor:'white'
     },
     image:{
         width:150,
         height:150,
         textAlign:'justify'
+        ,alignSelf:'center'
     },
     title:{
         fontSize:20,

@@ -4,7 +4,6 @@ import { OlvidasteContra } from '../Screens/OlvidasteContra';
 import { CrearCuentaScreen } from '../Screens/CrearCuentaScreen';
 import { HomeScreen } from '../Screens/HomeScreen/HomeScreen';
 
-
 import { useState } from 'react';
 
 //Data de prueba
@@ -15,8 +14,9 @@ export interface User{
 }
 
 const users:User[]=[
-  {id:1,  email:'hola', password:'123456'},
-  {id:2,  email:'caguas@gmail.com', password:'12345678'},
+  {id:1,  email:'richard@gmail.com', password:'123'},
+  {id:2,  email:'hola', password:'123'},
+  {id:2,  email:'vflores@gmail.com', password:'12345678'}
 ]
 
 const Stack = createStackNavigator();
@@ -34,7 +34,7 @@ export const StackNavigator = () => {
     <Stack.Navigator>
             <Stack.Screen name="LoginScreen" options={{headerShown:false}} children={()=><LoginScreen users={usersLogin}/>}/>
       <Stack.Screen name="OlvidasteContra" component={OlvidasteContra} />
-      <Stack.Screen name="CrearCuentaScreen" component={CrearCuentaScreen} />
+      <Stack.Screen name="CrearCuentaScreen" children={()=><CrearCuentaScreen usersLogin={usersLogin} setUsersLogin={handlerAddUser}/>} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
     </Stack.Navigator>
   );

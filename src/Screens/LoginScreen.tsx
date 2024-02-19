@@ -17,38 +17,32 @@ export interface LoginForm {
 interface LoginProps {
   users: User[]
 }
-//interface Props extends StackScreenProps<any,any>{};
+
 
 export const LoginScreen = ({ users }: LoginProps) => {
 
-  //Hook de navegación
+
   const navigation = useNavigation();
 
-  //Hook - control de los datos en el form
   const [form, setForm] = useState<LoginForm>({
     email: '',
     password: '',
     hasError: false,
   });
 
-  //const [numero, setNumero] = useState(0);
-
-  //Hook - desencriptar el password
   const [hiddenPassword, setHiddenPassword] = useState(true);
 
-  //Función que cambie el valor del useState (form)
   const handlerChangeText = (name: string, value: string) => {
-    console.log(name);
-    console.log(value); 
+    // console.log(name);
+    // console.log(value); 
     setForm(prevState => ({
       ...prevState,
       [name]: value,
     }))
   }
 
-  //Funcion que envie los datos del formulario
   const handlerSendInfo = () => {
-    //Validar formulario
+
     if (hasErrorFormLogin(form)) {
       setForm(prevState => ({
         ...prevState,
@@ -61,13 +55,13 @@ export const LoginScreen = ({ users }: LoginProps) => {
       hasError: false
     }))
 
-    // llamar función que verifica si el usuario existe en el arreglo
+
     const existUser = verifyExistUser(users, form);
     if (!existUser || existUser.password != form.password) {
       showSnackBar("email y/o contraseña incorrecta!", ERROR_COLOR);
       return;
     }
-    //console.log(form);
+
     navigation.dispatch(CommonActions.navigate({ name: 'HomeScreen' }))
 
   }
@@ -83,14 +77,13 @@ export const LoginScreen = ({ users }: LoginProps) => {
         hasError={form.hasError} 
         />
       <InputComponent
-        placeholder='Contraseña'
-        name={'password'}
-        onChangeText={handlerChangeText}
-        isPassword={hiddenPassword}
-        hasIcon={true}
-        accionIcon={() => setHiddenPassword(!hiddenPassword)}
-        hasError={form.hasError}
-      />
+      placeholder='Contraseña' 
+      name='password' 
+      onChangeText={handlerChangeText}
+      isPassword={hiddenPassword}
+      hasIcon={true}
+      accionIcon={()=>setHiddenPassword(!hiddenPassword)}
+      hasError={form.hasError}/>
       <TouchableOpacity 
             onPress={()=>navigation.dispatch(CommonActions.navigate({name:'OlvidasteContra'}))}>
             <Text style={styles.textoCrear}>Olvidaste tu contraseña?</Text>
@@ -111,7 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#014aa4',
     alignContent: 'center',
-    // alignItems: 'center',
+    
   },
   textoHola: {
     fontSize: 48,

@@ -5,7 +5,7 @@ import { View } from 'react-native'
 import { Product } from '../HomeScreen';
 import { ERROR_COLOR, PRIMARY_COLOR } from '../../../commons/color';
 import { Image } from 'react-native';
-//import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 interface Props{
@@ -28,6 +28,7 @@ export const ModalProduct = ({product,isVisible,changeVisible,handlerChangeStock
     // Funcion para agregar el producto -actualizar stock
     const handlerAddProducts=()=>{
     handlerChangeStockProduct(product.id,quantity)
+    setQuantity(1)
     //Cerramos Modal
     changeVisible()
     }
@@ -40,6 +41,8 @@ export const ModalProduct = ({product,isVisible,changeVisible,handlerChangeStock
 
         <View style={styles.header}>
              <Text style={styles.title}>{product.name}</Text>
+             
+     <Icon name={'cancel'} size={20} color={PRIMARY_COLOR} onPress={changeVisible}/>
          <View style={styles.iconClose}>
             
           </View>
@@ -128,6 +131,7 @@ const styles=StyleSheet.create({
     },
     image:{
         alignItems:'center',
+        alignSelf:'center'
         
     },
     buttonQuantity:{

@@ -18,7 +18,7 @@ export const ButtonComponent = ({title, onPress}:ButtonProps) => {
 
 const styles=StyleSheet.create({
     boton: {
-        width: 'auto',
+        width: 180,
         borderRadius: 25,
         borderWidth: 2,
         borderColor: 'black',
@@ -26,6 +26,7 @@ const styles=StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#eaa124',
         padding: 10,
+        alignSelf:'center'
         
         
       },
